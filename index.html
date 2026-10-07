@@ -7,7 +7,7 @@
     <style>
         /* Reset and canvas styling */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; font-family: 'Courier New', Courier, monospace; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; }
         
         .video-container {
             position: absolute;
@@ -21,55 +21,83 @@
             object-fit: cover; 
         }
 
-        /* Retro Unmute Button Styling */
+        /* Compact Square Glassmorphism Audio Button (Top Right Floating) */
         .audio-toggle {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            top: 25px;    /* Floating margin space from the top */
+            right: 25px;  /* Floating margin space from the right */
             z-index: 10;
-            background-color: rgba(0, 0, 0, 0.75);
-            color: #00ffcc; /* Retro neon cyan color */
-            border: 2px solid #00ffcc;
-            padding: 12px 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            /* Perfect square dimensions for an icon-only button */
+            width: 42px;
+            height: 42px;
+            
+            /* Glass Effect (Blur + Transparency) */
+            background: rgba(25, 25, 25, 0.55); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            
+            /* Neon Purple Subtle Edge Glow & Slight Rounded Corners */
+            border: 1px solid #bc13fe; 
+            box-shadow: 0 0 8px rgba(188, 19, 254, 0.4);
+            border-radius: 6px; /* Very slightly rounded modern look */
+            
             cursor: pointer;
-            box-shadow: 0 0 10px #00ffcc;
             transition: all 0.3s ease;
         }
 
+        /* Icon Vector Graphic Sizing */
+        .audio-toggle svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff; /* Crisp white vector icon */
+            transition: fill 0.3s ease;
+        }
+
+        /* Subtle Hover Reaction */
         .audio-toggle:hover {
-            background-color: #00ffcc;
-            color: #000;
-            box-shadow: 0 0 20px #00ffcc;
+            background: rgba(188, 19, 254, 0.85); /* Fills container with neon purple on hover */
+            box-shadow: 0 0 15px #bc13fe;
+            border-color: #ffffff;
         }
     </style>
 </head>
 <body>
 
     <div class="video-container">
-        <!-- The video must start muted so browsers allow it to autoplay safely -->
         <video id="retroVideo" autoplay loop muted playsinline>
             <source src="glitchd-coming-soon-variation-3.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
 
-    <!-- The interactive retro audio toggle -->
-    <button id="audioBtn" class="audio-toggle">🔊 UNMUTE AUDIO</button>
+    <!-- Icon-Only Interactive Square Audio Button Toggle -->
+    <button id="audioBtn" class="audio-toggle" aria-label="Toggle Audio">
+        <svg id="audioIcon" viewBox="0 0 24 24">
+            <!-- Default Sound Muted Vector Graphic Layout -->
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zM3 9v6h4l5 5V4L7 9H3z"/>
+        </svg>
+    </button>
 
     <script>
         const video = document.getElementById('retroVideo');
         const button = document.getElementById('audioBtn');
+        const icon = document.getElementById('audioIcon');
+
+        // Dynamic fluid crisp SVG code variables 
+        const iconVolumeOn = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zM3 9v6h4l5 5V4L7 9H3z"/>';
+        const iconVolumeMuted = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
 
         button.addEventListener('click', function() {
             if (video.muted) {
                 video.muted = false;
-                button.innerHTML = "🔇 MUTE AUDIO";
+                icon.innerHTML = iconVolumeMuted; // Switches to muted display layout state
             } else {
                 video.muted = true;
-                button.innerHTML = "🔊 UNMUTE AUDIO";
+                icon.innerHTML = iconVolumeOn; // Switches to playing display layout state
             }
         });
     </script>
