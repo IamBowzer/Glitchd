@@ -5,28 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coming Soon</title>
     <style>
-        /* Reset and canvas styling */
+        /* Reset and canvas layout configuration setup */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; }
         
         .video-container {
             position: absolute;
             top: 0; left: 0;
-            width: 100%; 
-            height: 100%;
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
             overflow: hidden;
-            background-color: #000; /* Deep black bars for mobile spacing */
         }
         
-        /* Desktop view stays full screen, mobile scales to fit perfectly between edges */
         video {
-            width: 100%; 
-            height: 100%;
-            object-fit: contain; /* Shrinks the video container to fit the screen without cropping text */
-            object-position: center; 
+            width: 100%; height: 100%;
+            object-fit: cover; 
+            object-position: center;
+        }
+
+        /* Desktop vs Mobile smart display switches */
+        .desktop-video { display: block; }
+        .mobile-video { display: none; }
+
+        /* Trigger conditions for mobile devices and narrow screens */
+        @media (max-width: 768px) {
+            .desktop-video { display: none; }
+            .mobile-video { display: block; }
         }
 
         /* Compact Square Glassmorphism Audio Button (Top Right Floating) */
@@ -38,18 +42,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            
             width: 42px;
             height: 42px;
-            
             background: rgba(25, 25, 25, 0.55); 
             backdrop-filter: blur(8px); 
             -webkit-backdrop-filter: blur(8px);
-            
             border: none; 
             outline: none;
             border-radius: 6px; 
-            
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -69,9 +69,14 @@
 <body>
 
     <div class="video-container">
-        <video id="retroVideo" autoplay loop muted playsinline>
+        <!-- Default landscape video engine for larger desktop screens -->
+        <video id="desktopVid" class="desktop-video" autoplay loop muted playsinline>
             <source src="glitchd-coming-soon-variation-3.mp4" type="video/mp4">
-            Your browser does not support the video tag.
+        </video>
+        
+        <!-- Smart responsive portrait video switcher targeted for mobile layouts -->
+        <video id="mobileVid" class="mobile-video" autoplay loop muted playsinline>
+            <source src="glitchd-mobile.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -83,7 +88,8 @@
     </button>
 
     <script>
-        const video = document.getElementById('retroVideo');
+        const desktopVid = document.getElementById('desktopVid');
+        const mobileVid = document.getElementById('mobileVid');
         const button = document.getElementById('audioBtn');
         const icon = document.getElementById('audioIcon');
 
@@ -91,11 +97,14 @@
         const iconVolumeOn = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zM3 9v6h4l5 5V4L7 9H3z"/>';
 
         button.addEventListener('click', function() {
-            if (video.muted) {
-                video.muted = false;
+            // Checks which video is actively displaying right now to switch the correct track
+            const activeVideo = window.getComputedStyle(mobileVid).display === 'block' ? mobileVid : desktopVid;
+            
+            if (activeVideo.muted) {
+                activeVideo.muted = false;
                 icon.innerHTML = iconVolumeOn;
             } else {
-                video.muted = true;
+                activeVideo.muted = true;
                 icon.innerHTML = iconVolumeMuted;
             }
         });
