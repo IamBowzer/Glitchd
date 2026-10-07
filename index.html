@@ -9,7 +9,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; }
         
-        /* Fixed responsive video background container */
         .video-container {
             position: absolute;
             top: 0; left: 0;
@@ -19,17 +18,18 @@
             justify-content: center; 
             align-items: center;
             overflow: hidden;
+            background-color: #000; /* Deep black bars for mobile spacing */
         }
         
-        /* Maintains perfect aspect ratio without stretching on any mobile device */
+        /* Desktop view stays full screen, mobile scales to fit perfectly between edges */
         video {
             width: 100%; 
             height: 100%;
-            object-fit: cover; /* Crops edges naturally instead of squeezing image */
-            object-position: center; /* Ensures the center of the video stays focused */
+            object-fit: contain; /* Shrinks the video container to fit the screen without cropping text */
+            object-position: center; 
         }
 
-        /* Compact Square Glassmorphism Audio Button (No Borders) */
+        /* Compact Square Glassmorphism Audio Button (Top Right Floating) */
         .audio-toggle {
             position: fixed;
             top: 25px;    
